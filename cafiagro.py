@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import openpyxl
+import time
 from selenium import webdriver
 
 # Ruta del archivo Excel
@@ -9,9 +10,9 @@ excel_file_path = 'Datos.xlsx'
 
 
 # URL del sitio web
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=392084e8-e824-4f27-9d3c-b147174c89f8'
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=d28b82a6-688f-4976-bf8f-41c9f23198ea'
 
-# Función para leer datos de Excel
+# Función para leer datos de Exce
 def leer_datos_desde_excel(file_path):
     workbook = openpyxl.load_workbook(file_path)
     sheet = workbook.active
@@ -38,15 +39,12 @@ try:
     # Puedes interactuar con elementos en la segunda pestaña aquí
     # Leer datos desde Excel
     datos_excel = leer_datos_desde_excel(excel_file_path)
-
+    time.sleep(5)
+    boton = driver.find_element(By.ID,'RadianContributorFileType')
+    time.sleep(5)
+    boton.click()
     # Iterar sobre los datos y rellenar el formulario
-    # for fila in datos_excel:
-    #     # Supongamos que el primer elemento en la fila es el nombre, el segundo es el correo, etc.
-    #     nombre, correo, telefono = fila
 
-    #     # Localizar los campos del formulario por su nombre, id, u otros atributos
-    #     campo_nombre = driver.find_element(By.ID, 'OrderReference_ID')
-        
 
     #     # Rellenar los campos con datos de Excel
     #     campo_nombre.send_keys(nombre)
