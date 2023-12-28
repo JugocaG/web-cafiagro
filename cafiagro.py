@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 
+
 # Ruta del archivo Excel
 excel_file_path = 'Datos.xlsx'
 
@@ -14,35 +15,73 @@ url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=
 
 
 # Función para leer datos de Excel
-def leer_datos_desde_excel(file_path):
-    workbook = openpyxl.load_workbook(file_path)
+def leer_datos_desde_excel():
+    workbook = openpyxl.load_workbook(excel_file_path)
     sheet = workbook.active
     data = []
 
     for row in sheet.iter_rows(min_row=2, values_only=True):
         data.append(row)
+    print(data)
     return data
+
+leer_datos_desde_excel()
 
 def ingresa_data(data):
     # Configurar Selenium
     driver = webdriver.Chrome()
-    driver.get('https://www.facebook.com/')
+    driver.get('https://accounts.google.com/lifecycle/steps/signup/name?continue=https://myaccount.google.com?utm_source%3Daccount-marketing-page%26utm_medium%3Dcreate-account-button&dsh=S805779475:1703802835653781&flowEntry=SignUp&flowName=GlifWebSignIn&theme=glif&TL=AHNYTIRXqx6ycBtWEQriyBkjJw-pE9xfZJIzxEUeGhdRMRiJBVhUWVbGayK0a8vn')
     # Utilizar los datos en Selenium
-    for row in data:
-        # Aquí puedes realizar interacciones con Selenium usando los datos
-        # Por ejemplo, enviar datos a un formulario, hacer clic en botones, etc.
-        input_element = driver.find_element_by_id('email')
-        input_element.send_keys(row[0])
 
-    # Realizar más acciones con Selenium según sea necesario
+    try:
+        for row in data:
+            input_element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, 'firstName'))
+            )
+            input_element.send_keys(row[0])  # row[0] es el primer elemento en la fila actual
 
-driver = webdriver.Chrome()
-#try:
-    #datos_excel = leer_datos_desde_excel(excel_file_path)
-    #ingresa_data(datos_excel)
-#finally:
-    # Cerrar el navegador al finalizar
-    #input(":(((")
+            input_element = WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, 'lastName'))
+            )
+            input_element.send_keys(row[1])  # row[1] es el segundo elemento en la fila actual
+
+            # Puedes agregar más campos y datos según sea necesario
+
+            # Esperar un breve momento antes de pasar a la siguiente iteración (opcional)
+            driver.implicitly_wait(5)
+        # input_element = WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, 'firstName'))
+        # )
+        # input_element.send_keys(
+        #     data[0][0])  # data[0] representa la primera fila, data[0][0] es el primer elemento en esa fila
+        #
+        # input_element = WebDriverWait(driver, 10).until(
+        #     EC.presence_of_element_located((By.ID, 'lastName'))
+        # )
+        # input_element.send_keys(data[0][1])
+        # for row in data:
+        #     # Aquí puedes realizar interacciones con Selenium usando los datos
+        #     # Por ejemplo, enviar datos a un formulario, hacer clic en botones, etc.
+        #
+        #     input_element = WebDriverWait(driver, 10).until(
+        #         EC.presence_of_element_located((By.ID, 'firstName'))
+        #     )
+        #     input_element.send_keys(row[0])
+        #
+        #     input_element = WebDriverWait(driver, 10).until(
+        #         EC.presence_of_element_located((By.ID, 'lastName'))
+        #     )
+        #     input_element.send_keys(row[1])
+    finally:
+        # Cerrar el navegador al finalizar
+        input(":)")
+
+try:
+    datos_excel = leer_datos_desde_excel()
+    ingresa_data(datos_excel)
+finally:
+     # Cerrar el navegador al finalizar
+    input(":)")
 # Configurar Selenium y abrir el sitio web
 
 
