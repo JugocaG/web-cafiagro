@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import Select
 excel_file_path = 'Datos.xlsx'
 
 # URL del sitio web
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=c6a58a3d-db63-4971-acff-11fbc9f68f09'
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=7bcaa1a6-8118-40a8-a63d-a4d6995ef3d4'
 
 
 # Función para leer datos de Excel
@@ -37,12 +37,12 @@ def ingresa_data(data):
     # Realizar más acciones con Selenium según sea necesario
 
 driver = webdriver.Chrome()
-try:
-    datos_excel = leer_datos_desde_excel(excel_file_path)
-    ingresa_data(datos_excel)
-finally:
+#try:
+    #datos_excel = leer_datos_desde_excel(excel_file_path)
+    #ingresa_data(datos_excel)
+#finally:
     # Cerrar el navegador al finalizar
-    input(":(((")
+    #input(":(((")
 # Configurar Selenium y abrir el sitio web
 
 
@@ -77,10 +77,15 @@ try:
 
     finally:
 
-        elemento2 = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, 'Invoice'))
-        )
-        driver.execute_script("arguments[0].click();", elemento2)
+       # elemento2 = WebDriverWait(driver, 10).until(
+        #    EC.element_to_be_clickable((By.CLASS_NAME, 'parent-link'))
+        #)
+        #driver.execute_script("arguments[0].click();", elemento2)
+
+        #elemento4 = WebDriverWait(driver, 5).until(
+        #    EC.element_to_be_clickable((By.ID, 'RadianContributorFileType'))
+        #)
+        #driver.execute_script("arguments[0].click();", elemento4)
 
         url1 = 'https://catalogo-vpfe.dian.gov.co/User/RedirectToBiller'
         driver.get(url1)
@@ -90,55 +95,74 @@ try:
         )
         driver.execute_script("arguments[0].click();", elemento3)
 
-
-
-
         dropdown = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, 'RangoNum'))
         )
-
         # Crear un objeto Select para interactuar con el elemento de lista desplegable
         select = Select(dropdown)
-
         # Seleccionar una opción por valor
         select.select_by_value('a1622672-35d6-4132-a6a2-491657083a98')
 
         elemento_vendedor = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.XPATH, '//a[@href="#collapseTwo"]'))
         )
-
         # Hacer clic en el elemento
         elemento_vendedor.click()
-
-        
 
         codigo_postal = WebDriverWait(driver, 10).until(
         EC.element_to_be_clickable((By.ID, 'accountingCustomerPartyField_Party_PhysicalLocation_Address_PostalZone'))
         )
-
         select_codigo_postal = Select(codigo_postal)
-
         # Seleccionar una opción por valor
         select_codigo_postal.select_by_value('111711')
 
-
-
         id_del_select = 'origin'
-
         # Nuevo valor que deseas establecer
         nuevo_valor = '10'
-
         # Ejecutar JavaScript para cambiar el valor del elemento <select>
         script = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
         driver.execute_script(script)
 
-        
+        id_del_select1 = 'RegimenFiscal'
+         #Nuevo valor que deseas establecer
+        nuevo_valor1 = 'R-99-PN'
+         #Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
+        driver.execute_script(script1)
 
-    
+        id_del_select1 = 'TipoDocumento'
+         #Nuevo valor que deseas establecer
+        nuevo_valor1 = '31'
+         #Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
+        driver.execute_script(script1)
+
+        id_del_select1 = 'accountingCustomerPartyField_Party_PhysicalLocation_Address_Country_IdentificationCode'
+         #Nuevo valor que deseas establecer
+        nuevo_valor1 = 'CO'
+         #Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
+        driver.execute_script(script1)
+
+        id_del_select1 = 'NumeroDocumento'
+         #Nuevo valor que deseas establecer
+        nuevo_valor1 = '12143849'
+         #Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
+        driver.execute_script(script1)
+
+        id_del_select1 = 'Departamento'
+         #Nuevo valor que deseas establecer
+        nuevo_valor1 = '41'
+         #Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
+        driver.execute_script(script1)
+        script_change_event = f"document.getElementById('{id_del_select1}').dispatchEvent(new Event('change'));"
+        driver.execute_script(script_change_event)
 
 
-        
-        
+
+
 
 
 
