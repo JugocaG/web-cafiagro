@@ -4,12 +4,13 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 
 # Ruta del archivo Excel
 excel_file_path = 'Datos.xlsx'
 
 # URL del sitio web
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=2fa8e527-ea8a-449b-b9dc-0b2344c618db'
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=c6a58a3d-db63-4971-acff-11fbc9f68f09'
 
 
 # Función para leer datos de Excel
@@ -56,6 +57,7 @@ try:
         iniciar_sesion()
 
     finally:
+
         elemento2 = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'Invoice'))
         )
@@ -65,11 +67,59 @@ try:
         driver.get(url1)
 
         elemento3 = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button documento'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button.documento'))
         )
         driver.execute_script("arguments[0].click();", elemento3)
 
         datos_excel = leer_datos_desde_excel(excel_file_path)
+
+
+        dropdown = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, 'RangoNum'))
+        )
+
+        # Crear un objeto Select para interactuar con el elemento de lista desplegable
+        select = Select(dropdown)
+
+        # Seleccionar una opción por valor
+        select.select_by_value('a1622672-35d6-4132-a6a2-491657083a98')
+
+        elemento_vendedor = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//a[@href="#collapseTwo"]'))
+        )
+
+        # Hacer clic en el elemento
+        elemento_vendedor.click()
+
+        
+
+        codigo_postal = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, 'accountingCustomerPartyField_Party_PhysicalLocation_Address_PostalZone'))
+        )
+
+        select_codigo_postal = Select(codigo_postal)
+
+        # Seleccionar una opción por valor
+        select_codigo_postal.select_by_value('111711')
+
+
+
+        id_del_select = 'origin'
+
+        # Nuevo valor que deseas establecer
+        nuevo_valor = '10'
+
+        # Ejecutar JavaScript para cambiar el valor del elemento <select>
+        script = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
+        driver.execute_script(script)
+
+        
+
+    
+
+
+        
+        
 
 
 
