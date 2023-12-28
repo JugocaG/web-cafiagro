@@ -35,7 +35,7 @@ def ingresa_data(data):
 
     # Realizar más acciones con Selenium según sea necesario
 
-
+driver = webdriver.Chrome()
 try:
     datos_excel = leer_datos_desde_excel(excel_file_path)
     ingresa_data(datos_excel)
