@@ -22,9 +22,28 @@ def leer_datos_desde_excel(file_path):
         data.append(row)
     return data
 
+def ingresa_data(data):
+    # Configurar Selenium
+    driver = webdriver.Chrome()
+    driver.get('https://www.facebook.com/')
+    # Utilizar los datos en Selenium
+    for row in data:
+        # Aquí puedes realizar interacciones con Selenium usando los datos
+        # Por ejemplo, enviar datos a un formulario, hacer clic en botones, etc.
+        input_element = driver.find_element_by_id('email')
+        input_element.send_keys(row[0])
 
+    # Realizar más acciones con Selenium según sea necesario
+
+
+try:
+    datos_excel = leer_datos_desde_excel(excel_file_path)
+    ingresa_data(datos_excel)
+finally:
+    # Cerrar el navegador al finalizar
+    input(":(((")
 # Configurar Selenium y abrir el sitio web
-driver = webdriver.Chrome()
+
 
 def iniciar_sesion():
     elemento = WebDriverWait(driver, 10).until(
@@ -65,11 +84,11 @@ try:
         driver.get(url1)
 
         elemento3 = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button documento'))
+            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button.documento'))
         )
         driver.execute_script("arguments[0].click();", elemento3)
 
-        datos_excel = leer_datos_desde_excel(excel_file_path)
+
 
 
 
