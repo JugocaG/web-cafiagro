@@ -9,7 +9,7 @@ from datetime import datetime
 import pytz
 
 
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=b15412f1-1eb8-4d34-8081-b0a91896e2a9'
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=e6c72c6c-91c5-4247-ad08-454214e7f74e'
 
 driver = webdriver.Chrome()
 def iniciar_sesion():
