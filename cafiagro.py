@@ -10,47 +10,10 @@ import pytz
 import time
 import pyautogui
 
-# Ruta del archivo Excel
-excel_file_path = 'Datos.xlsx'
 
-# URL del sitio web
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094%7C26566160&rk=813013472&token=3e8a56d0-eb02-4bd5-b3f7-4716269250f1'
-
-
-# Función para leer datos de Excel
-def leer_datos_desde_excel():
-    workbook = openpyxl.load_workbook(excel_file_path)
-    sheet = workbook.active
-    data = []
-
-
-    for row in sheet.iter_rows(min_row=2, values_only=True):
-        data.append(row)
-    return data
-
-def ingresa_data(data):
-    # Configurar Selenium
-    driver = webdriver.Chrome()
-    driver.get('https://www.facebook.com/')
-    # Utilizar los datos en Selenium
-    for row in data:
-        # Aquí puedes realizar interacciones con Selenium usando los datos
-        # Por ejemplo, enviar datos a un formulario, hacer clic en botones, etc.
-        input_element = driver.find_element_by_id('email')
-        input_element.send_keys(row[0])
-
-    # Realizar más acciones con Selenium según sea necesario
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=e6c72c6c-91c5-4247-ad08-454214e7f74e'
 
 driver = webdriver.Chrome()
-#try:
-    #datos_excel = leer_datos_desde_excel(excel_file_path)
-    #ingresa_data(datos_excel)
-#finally:
-    # Cerrar el navegador al finalizar
-    #input(":(((")
-# Configurar Selenium y abrir el sitio web
-
-
 def iniciar_sesion():
     elemento = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.ID, 'legalRepresentative'))
@@ -86,6 +49,71 @@ def llenar_campos():
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
     driver.execute_script(script1)
     # ------------------------------ #
+
+
+
+    try:
+        iniciar_sesion()
+    finally:
+
+        driver.get('https://catalogo-vpfe.dian.gov.co/User/RedirectToBiller')
+
+        elemento3 = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button.documento'))
+        )
+        driver.execute_script("arguments[0].click();", elemento3)
+
+        tiempo_espera_segundos = 10
+        elemento = WebDriverWait(driver, tiempo_espera_segundos).until(
+            EC.visibility_of_element_located((By.ID, 'OrderReference_ID'))
+             )
+        
+            # -------------------------------------------------------- DATOS DEL EXCEL --------------------------------------------------------#
+        excel_file_path = 'Datos.xlsx'
+        workbook = openpyxl.load_workbook(excel_file_path)
+        sheet = workbook.active
+        data = []
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            data.append(row)
+        print(data)
+        for row in data:
+            orden_compra = row[0]
+            Tipo_cafe = row[1]
+            doc_cl = row[2]
+            nombre_cliente = (
+                                 (str(row[5]) + " ") if (row[5] is not None) and str(row[5]) else "") + (
+                                 (str(row[6]) + " ") if (row[6] is not None) and str(row[6]) else "") + (
+                                 (str(row[3]) + " ") if (row[3] is not None) and str(row[3]) else "") + (
+                                 (str(row[4]) + " ") if (row[4] is not None) and str(row[4]) else "")
+            print(nombre_cliente)
+            dir_cl = "VEREDA " + str(row[7])
+            municipio = row[8]
+            cod_postal = row[9]
+            cant_kilos = row[10]
+            valor = row[11]
+            try:
+                id_del_select = 'OrderReference_ID'
+                nuevo_valor = orden_compra
+                script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
+                driver.execute_script(script1)
+            finally:
+                print("error")
+            # -------------------------------------------------------- DATOS DEL DOCUMENTO --------------------------------------------------------#
+
+                dropdown = WebDriverWait(driver, 10).until(
+                    EC.element_to_be_clickable((By.ID, 'RangoNum'))
+                )
+                # Crear un objeto Select para interactuar con el elemento de lista desplegable
+                select = Select(dropdown)
+                # Seleccionar una opción por valor
+                select.select_by_value('a1622672-35d6-4132-a6a2-491657083a98')
+
+                # id_del_select = 'OrderReference_ID'
+                # # Nuevo valor que deseas establecer
+                # nuevo_valor = '12345'
+                # # Ejecutar JavaScript para cambiar el valor del elemento <select>
+                # script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
+                # driver.execute_script(script1)
 
     elemento10 = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.CLASS_NAME, 'ui-datepicker-trigger'))
