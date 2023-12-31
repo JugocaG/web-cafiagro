@@ -11,7 +11,7 @@ import time
 import pyautogui
 
 
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=e6c72c6c-91c5-4247-ad08-454214e7f74e'
+url = ' https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=19268c26-fb96-44dc-8120-8711d6e01171'
 
 driver = webdriver.Chrome()
 def iniciar_sesion():
@@ -43,77 +43,13 @@ def llenar_campos():
     )
     select = Select(dropdown)
     select.select_by_value('a1622672-35d6-4132-a6a2-491657083a98')
+
     #Orden de Compra
     id_del_select = 'OrderReference_ID' 
-    nuevo_valor = '4145'
+    nuevo_valor = orden_compra
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
     driver.execute_script(script1)
     # ------------------------------ #
-
-
-
-    try:
-        iniciar_sesion()
-    finally:
-
-        driver.get('https://catalogo-vpfe.dian.gov.co/User/RedirectToBiller')
-
-        elemento3 = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.CLASS_NAME, 'menu-button.documento'))
-        )
-        driver.execute_script("arguments[0].click();", elemento3)
-
-        tiempo_espera_segundos = 10
-        elemento = WebDriverWait(driver, tiempo_espera_segundos).until(
-            EC.visibility_of_element_located((By.ID, 'OrderReference_ID'))
-             )
-        
-            # -------------------------------------------------------- DATOS DEL EXCEL --------------------------------------------------------#
-        excel_file_path = 'Datos.xlsx'
-        workbook = openpyxl.load_workbook(excel_file_path)
-        sheet = workbook.active
-        data = []
-        for row in sheet.iter_rows(min_row=2, values_only=True):
-            data.append(row)
-        print(data)
-        for row in data:
-            orden_compra = row[0]
-            Tipo_cafe = row[1]
-            doc_cl = row[2]
-            nombre_cliente = (
-                                 (str(row[5]) + " ") if (row[5] is not None) and str(row[5]) else "") + (
-                                 (str(row[6]) + " ") if (row[6] is not None) and str(row[6]) else "") + (
-                                 (str(row[3]) + " ") if (row[3] is not None) and str(row[3]) else "") + (
-                                 (str(row[4]) + " ") if (row[4] is not None) and str(row[4]) else "")
-            print(nombre_cliente)
-            dir_cl = "VEREDA " + str(row[7])
-            municipio = row[8]
-            cod_postal = row[9]
-            cant_kilos = row[10]
-            valor = row[11]
-            try:
-                id_del_select = 'OrderReference_ID'
-                nuevo_valor = orden_compra
-                script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
-                driver.execute_script(script1)
-            finally:
-                print("error")
-            # -------------------------------------------------------- DATOS DEL DOCUMENTO --------------------------------------------------------#
-
-                dropdown = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.ID, 'RangoNum'))
-                )
-                # Crear un objeto Select para interactuar con el elemento de lista desplegable
-                select = Select(dropdown)
-                # Seleccionar una opción por valor
-                select.select_by_value('a1622672-35d6-4132-a6a2-491657083a98')
-
-                # id_del_select = 'OrderReference_ID'
-                # # Nuevo valor que deseas establecer
-                # nuevo_valor = '12345'
-                # # Ejecutar JavaScript para cambiar el valor del elemento <select>
-                # script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
-                # driver.execute_script(script1)
 
     elemento10 = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.CLASS_NAME, 'ui-datepicker-trigger'))
@@ -129,6 +65,7 @@ def llenar_campos():
     nuevo_valor = '1'
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
     driver.execute_script(script1)
+
     id_del_select = 'TiopoNeg'
     nuevo_valor = '1'
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
@@ -170,13 +107,13 @@ def llenar_campos():
 
     #Numero de documento
     id_del_select1 = 'NumeroDocumento'
-    nuevo_valor1 = '12181767'
+    nuevo_valor1 = doc_cl
     script1 = f"document.getElementById('{id_del_select1}').value = '{nuevo_valor1}';"
     driver.execute_script(script1)
 
     #Razon social
     id_del_select = 'RazonSocial'
-    nuevo_valor = 'ISAIAS ISAIAS ISAIAS'
+    nuevo_valor = nombre_cliente
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
     driver.execute_script(script1)
 
@@ -220,7 +157,7 @@ def llenar_campos():
     #Ciudad
     id_del_select = 'Ciudad'
     nuevo_valor = '41668'
-    nuevo_texto = '41668 | SAN AGUSTÍN'
+    nuevo_texto = municipio
     script = f"var select = document.getElementById('{id_del_select}'); " \
             f"var option = document.createElement('option'); " \
             f"option.value = '{nuevo_valor}'; " \
@@ -238,8 +175,8 @@ def llenar_campos():
 
     #Codigo Postal
     id_del_select = 'accountingCustomerPartyField_Party_PhysicalLocation_Address_PostalZone'
-    nuevo_valor = '417030'
-    nuevo_texto = '417030'
+    nuevo_valor = str(cod_postal)
+    nuevo_texto = cod_postal
     script = f"var select = document.getElementById('{id_del_select}'); " \
             f"var option = document.createElement('option'); " \
             f"option.value = '{nuevo_valor}'; " \
@@ -274,7 +211,7 @@ def llenar_campos():
 
     #Precio Unitario
     id_del_select1 = 'PrecioUnitario1'
-    precio_unitario = '5077.83'
+    precio_unitario = tasa
     script1 = f"document.getElementById('{id_del_select1}').value = '{precio_unitario}';"
     driver.execute_script(script1)
 
@@ -285,7 +222,7 @@ def llenar_campos():
     # Hacer clic en el elemento cantidad
     elemento_datos.click()
     time.sleep(1)
-    pyautogui.typewrite('626.8')
+    pyautogui.typewrite(str(cant_kilos))
 
     elemento_datos = WebDriverWait(driver, 10).until(
     EC.element_to_be_clickable((By.XPATH, '//*[@id="ProductDetailsTable"]/tbody/tr/td[4]'))
@@ -321,14 +258,15 @@ def llenar_campos():
     )
     driver.execute_script("arguments[0].click();", elemento32)
 
-    time.sleep(3)
+    time.sleep(7)
 
     driver.switch_to.alert.accept()
 
     driver.get('https://gratis-vpfe.dian.gov.co/SupportDocuments/Adjustment')
 
-
 driver.get(url)
+
+
 try:
     iniciar_sesion()
 finally:
@@ -339,7 +277,36 @@ finally:
     )
     driver.execute_script("arguments[0].click();", elemento3)
 
-    llenar_campos()
+    global orden_compra, tipo_cafe, doc_cl, nombre_cliente, dir_cl, municipio, cod_postal, cant_kilos, valor
+    excel_file_path = 'Datos.xlsx'
+    workbook = openpyxl.load_workbook(excel_file_path)
+    sheet = workbook.active
+    data = []
+    for row in sheet.iter_rows(min_row=2, values_only=True):
+        data.append(row)
+    print(data)
+    for row in data:
+        orden_compra = row[0]
+        tipo_cafe = row[1]
+        doc_cl = row[2]
+        nombre_cliente = (
+                             (str(row[5]) + " ") if (row[5] is not None) and str(row[5]) else "") + (
+                             (str(row[6]) + " ") if (row[6] is not None) and str(row[6]) else "") + (
+                             (str(row[3]) + " ") if (row[3] is not None) and str(row[3]) else "") + (
+                             (str(row[4]) + " ") if (row[4] is not None) and str(row[4]) else "")
+        dir_cl = "VEREDA " + str(row[7])
+        municipio = row[8]
+        cod_postal = row[9]
+        cant_kilos = str(row[10])
+        cant_kilos = cant_kilos.replace(',', '.')
+        cant_kilos = str(cant_kilos)
+        tasa = str(row[13])
+        tasa = tasa.replace(',', '.')
+        tasa = float(tasa)
+        valor = row[11]
+
+        llenar_campos()
+
     
     
             
