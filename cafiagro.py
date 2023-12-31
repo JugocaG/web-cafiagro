@@ -11,7 +11,7 @@ import time
 import pyautogui
 
 
-url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094%7C26566160&rk=813013472&token=d5539ade-0809-4b58-a6b1-7f71ecb99cd4'
+url = 'https://catalogo-vpfe.dian.gov.co/User/AuthToken?pk=10910094|26566160&rk=813013472&token=7e7bb870-6cb4-4785-b142-86c520b10df3'
 
 driver = webdriver.Chrome()
 def iniciar_sesion():
@@ -38,7 +38,7 @@ def iniciar_sesion():
 def llenar_campos():
     #-------------------------------------------------------- DATOS DEL DOCUMENTO --------------------------------------------------------#
     
-    dropdown = WebDriverWait(driver, 10).until(
+    dropdown = WebDriverWait(driver, 1000000).until(
     EC.element_to_be_clickable((By.ID, 'RangoNum'))
     )
     select = Select(dropdown)
@@ -169,7 +169,7 @@ def llenar_campos():
     
     #Direccion
     id_del_select = 'accountingCustomerPartyField_Party_PhysicalLocation_Address_AddressLine'
-    nuevo_valor = 'VEREDA LOS SAUCES'
+    nuevo_valor = dir_cl
     script1 = f"document.getElementById('{id_del_select}').value = '{nuevo_valor}';"
     driver.execute_script(script1)
 
@@ -199,12 +199,24 @@ def llenar_campos():
     EC.element_to_be_clickable((By.XPATH, '//a[@href="#collapseProductDetails"]'))
     )
     elemento_productos.click()
-
     driver.execute_script("uploadListProductDetails(1);")
 
-    elemento_datos = WebDriverWait(driver, 10).until(
-    EC.element_to_be_clickable((By.XPATH, '//*[@id="IdTableListProduct"]/tbody/tr[1]/td[3]'))
-    )
+
+    if (tipo_cafe == 'MOJADO'):
+        elemento_datos = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="IdTableListProduct"]/tbody/tr[2]/td[3]'))
+        )
+
+    elif tipo_cafe == 'SECO':
+        elemento_datos = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="IdTableListProduct"]/tbody/tr[1]/td[3]'))
+        )
+
+    elif tipo_cafe == 'PASILLA':
+        elemento_datos = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="IdTableListProduct"]/tbody/tr[3]/td[3]'))
+        )
+
 
     # Hacer clic en el elemento
     elemento_datos.click()
@@ -260,7 +272,8 @@ def llenar_campos():
 
     time.sleep(7)
 
-    driver.switch_to.alert.accept()
+    alert = WebDriverWait(driver, 10).until(EC.alert_is_present())
+    alert.accept()
 
     driver.get('https://gratis-vpfe.dian.gov.co/SupportDocuments/Adjustment')
 
@@ -306,6 +319,8 @@ finally:
         valor = row[11]
 
         llenar_campos()
+
+    print("------------------------------------------------------------ TODO SE LLENO CON EXITO ------------------------------------------------------------")
 
     
     
